@@ -6,7 +6,6 @@ import com.example.gateway.payment.cko.domain.PaymentProcessResult
 
 //import templates.CkoRestTemplateProvider
 
-
 interface PaymentService {
     fun getPaymentDetails(paymentId: String): PaymentDetail
     fun sendPayment(request: PaymentProcessRequest): PaymentProcessResult

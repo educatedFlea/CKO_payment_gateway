@@ -1,5 +1,5 @@
 package templates
-
+// TODO rest templates - possible future enhancement, if it is something needs be used frequently
 //
 //interface CkoRestTemplate {
 //    fun <R> getFromUrl(url: String, responseType: Class<R>, vararg urlVariable: Any, headers: HttpHeaders = HttpHeaders.EMPTY): R?
