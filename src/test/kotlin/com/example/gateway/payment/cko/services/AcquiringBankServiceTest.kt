@@ -5,7 +5,7 @@ import com.example.gateway.payment.cko.bank.AcquiringBank
 import com.example.gateway.payment.cko.config.ServiceConfiguration
 import com.example.gateway.payment.cko.domain.PaymentDetail
 import com.example.gateway.payment.cko.domain.PaymentProcessRequest
-import com.example.gateway.payment.cko.domain.PaymentProcessTransaction
+
 import com.example.gateway.payment.cko.domain.PaymentStatus.Successful
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -51,32 +51,23 @@ class AcquiringBankServiceTest {
         stubbedAcquiringBank.stubbedPaymentProcessingFor(paymentId, Successful)
 
         //when
-        val response = acquiringBank.first().sendTransaction(testPaymentProcessTransaction)
+        val response = acquiringBank.first().sendPayment(paymentProcessRequest)
 
         //then
         assertThat(response.paymentStatus).isEqualTo(Successful)
     }
 
-    private val testPaymentDetail =
-            PaymentDetail(
-                    cardNumber = "1234567812345678",
-                    paymentAmount = 100,
-                    paymentProcessedTime = LocalDateTime.now(),
-                    paymentStatus = Successful
-            )
+    private val paymentProcessRequest = PaymentProcessRequest(
+            cardNumber = "1234567812345678",
+            expiryDate = YearMonth.now(),
+            paymentAmount = 50,
+            currency = Currency.getInstance(Locale.FRANCE),
+            cvv = 123,
+    )
 
-
-    private val testPaymentProcessTransaction = PaymentProcessTransaction(
-            paymentId = "some-id",
-            paymentStatus = Successful,
-            paymentRequest = PaymentProcessRequest(
-                    cardNumber = "1234567812345678",
-                    expiryDate = YearMonth.now(),
-                    paymentAmount = 50,
-                    currency = Currency.getInstance(Locale.FRANCE),
-                    cvv = 123,
-                    paymentRequestTime = LocalDateTime.now()
-            ),
-            paymentProcessedTime = LocalDateTime.now()
+    private val testPaymentDetail = PaymentDetail(
+            paymentId = "1234",
+            paymentProcessRequest = paymentProcessRequest,
+            paymentRequestTime = LocalDateTime.now(),
     )
 }

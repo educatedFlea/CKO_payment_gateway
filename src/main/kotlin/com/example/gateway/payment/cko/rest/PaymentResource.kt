@@ -1,12 +1,9 @@
 package com.example.gateway.payment.cko.rest;
 
 //import com.example.gateway.payment.cko.services.AcquiringBankService
-import com.example.gateway.payment.cko.domain.PaymentDetail
-import com.example.gateway.payment.cko.domain.PaymentProcessRequest
-import com.example.gateway.payment.cko.domain.PaymentProcessResult
+import com.example.gateway.payment.cko.domain.*
 import com.example.gateway.payment.cko.services.PaymentService
 import io.swagger.v3.oas.annotations.Operation
-import org.apache.http.HttpException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -22,21 +19,17 @@ public class PaymentResource(
     @ResponseStatus(ACCEPTED)
     fun getPaymentDetails(
             @PathVariable paymentId: String,
-    ): ResponseEntity<PaymentDetail> {
+    ): ResponseEntity<GetPaymentResult> {
         return ResponseEntity.ok(paymentService.getPaymentDetails(paymentId))
     }
 
     @Operation(summary = "Post request to process a payment with required data in request body")
-    @PostMapping("/process")
+    @PostMapping("/process/{paymentId}")
     @ResponseStatus(ACCEPTED)
     fun requestPaymentProcess(
+            @PathVariable paymentId: String,
             @RequestBody paymentProcessRequest: PaymentProcessRequest
     ): ResponseEntity<PaymentProcessResult> {
-        try {
-            return ResponseEntity.ok(paymentService.sendPayment(paymentProcessRequest))
-        } catch (e: HttpException) {
-            throw HttpException("Failed processing payment") // TODO area to improve: provide comprehensive error message
-        }
+        return ResponseEntity.ok(paymentService.sendPayment(paymentId, paymentProcessRequest))
     }
-
 }

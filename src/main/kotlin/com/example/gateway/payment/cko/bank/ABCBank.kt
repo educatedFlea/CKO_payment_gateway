@@ -1,8 +1,8 @@
 package com.example.gateway.payment.cko.bank
 
 import com.example.gateway.payment.cko.domain.PaymentDetail
+import com.example.gateway.payment.cko.domain.PaymentProcessRequest
 import com.example.gateway.payment.cko.domain.PaymentProcessResult
-import com.example.gateway.payment.cko.domain.PaymentProcessTransaction
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.stereotype.Component
@@ -28,8 +28,8 @@ override fun getPayment(paymentId: String): PaymentDetail {
 
 }
 
-    override fun sendTransaction(transaction: PaymentProcessTransaction): PaymentProcessResult {
-        val requestBody = objectMapper.writeValueAsString(transaction)
+    override fun sendPayment(paymentProcessRequest: PaymentProcessRequest): PaymentProcessResult {
+        val requestBody = objectMapper.writeValueAsString(paymentProcessRequest)
 
         val client = HttpClient.newBuilder().build();
         val request = HttpRequest.newBuilder()

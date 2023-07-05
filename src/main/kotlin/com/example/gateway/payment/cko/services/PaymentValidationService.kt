@@ -1,12 +1,13 @@
 package com.example.gateway.payment.cko.services
 
 import com.example.gateway.payment.cko.domain.PaymentProcessRequest
+import org.apache.http.HttpException
 import java.time.YearMonth
 
 class PaymentValidationService(private val validationRules: List<PaymentValidationRule>) {
     fun validate(request: PaymentProcessRequest) {
         if (!validationRules.all { it.validate(request) }) {
-            throw IllegalArgumentException("Validation failed")
+            throw HttpException("Validation failed")
         }
     }
 }
